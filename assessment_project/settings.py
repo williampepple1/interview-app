@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+import dj_database_url
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +31,7 @@ SECRET_KEY = 'django-insecure-w2@)k(*avylr(-u%2#wa-e6_@9--yw8-s!mk$y&=0^07k#+w(n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', '.vercel.app']
 
 
 # Application definition
@@ -68,17 +74,21 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'assessment_project.wsgi.application'
+WSGI_APPLICATION = 'assessment_project.wsgi.app'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# Database configuration using URL
+DATABASE_URL = os.environ.get('POSTGRES_URL_NON_POOLING', 'postgres://postgres.tcluugghnwavnbvgchcu:xzrlr2Z45ZzFlWTA@aws-0-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require')
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.db',
-    }
+    'default': dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 

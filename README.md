@@ -6,7 +6,7 @@ A Django-based assessment application where users can take timed multiple-choice
 - Admin can create assessments with multiple-choice questions
 - Users can attempt assessments with a 30-second time limit per question
 - Session-based assessment tracking
-- SQLite database for data storage
+- PostgreSQL database for data storage
 
 ## Setup Instructions
 

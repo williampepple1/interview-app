@@ -1,16 +1,31 @@
 {
     "version": 2,
     "builds": [
-      {
-        "src": "assessment/wsgi.py",
-        "use": "@vercel/python"
-      }
+        {
+            "src": "assessment/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "50mb",
+                "runtime": "python3.9"
+            }
+        },
+        {
+            "src": "build_files.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "staticfiles"
+            }
+        }
     ],
     "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "assessment/wsgi.py"
-      }
+        {
+            "src": "/static/(.*)",
+            "dest": "/static/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "assessment/wsgi.py"
+        }
     ]
-  }
+}
   
