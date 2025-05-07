@@ -103,6 +103,9 @@ def submit_answer(request, assessment_id):
     # Retrieve mapping from session
     option_mappings = request.session.get('option_mappings', {})
     shuffled_to_original = option_mappings.get(str(current_question.id))
+    print('DEBUG: option_mappings:', option_mappings)
+    print('DEBUG: shuffled_to_original:', shuffled_to_original)
+    print('DEBUG: selected_option:', selected_option)
     if not shuffled_to_original:
         return JsonResponse({'error': 'Option mapping not found. Please reload the page.'}, status=400)
 
@@ -112,7 +115,9 @@ def submit_answer(request, assessment_id):
         return JsonResponse({'error': 'Invalid option selected.'}, status=400)
 
     # Map shuffled index to original option number
-    original_position = shuffled_to_original.get(selected_option)
+    original_position = shuffled_to_original.get(str(selected_option))
+    print('DEBUG: original_position:', original_position)
+    print('DEBUG: correct_option:', current_question.correct_option)
     if not original_position:
         return JsonResponse({'error': 'Invalid option selected.'}, status=400)
 
