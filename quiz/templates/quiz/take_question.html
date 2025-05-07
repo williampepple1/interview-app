@@ -1,0 +1,89 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}{{ assessment.title }} - Question {{ question_number }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">{{ assessment.title }}</h2>
+        <div class="text-lg font-semibold text-blue-600" id="timer">30</div>
+    </div>
+
+    <div class="mb-8">
+        <div class="flex justify-between text-sm text-gray-500 mb-4">
+            <span>Question {{ question_number }} of {{ total_questions }}</span>
+            <span>Time remaining: <span id="timer-text">30</span> seconds</span>
+        </div>
+        <p class="text-lg text-gray-800 mb-6">{{ question.question_text }}</p>
+        
+        <form id="question-form" class="space-y-4">
+            {% csrf_token %}
+            <div class="space-y-3">
+                {% for option_num, option_text in options %}
+                    <label class="flex items-center p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition duration-200">
+                        <input type="radio" name="answer" value="{{ option_num }}" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-3">{{ option_text }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300">
+                Submit Answer
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let timeLeft = 30;
+        const timerElement = document.getElementById('timer');
+        const timerTextElement = document.getElementById('timer-text');
+        const form = document.getElementById('question-form');
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            timerTextElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                submitAnswer();
+            }
+        }, 1000);
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearInterval(timer);
+            submitAnswer();
+        });
+
+        async function submitAnswer() {
+            const formData = new FormData(form);
+            const selectedOption = formData.get('answer') || '0';  // Default to 0 if no answer selected
+            
+            try {
+                const response = await fetch('{% url "quiz:submit_answer" assessment.id %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        selected_option: parseInt(selectedOption)
+                    })
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Error submitting answer');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    });
+</script>
+{% endblock %} 
