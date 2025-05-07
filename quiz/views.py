@@ -229,3 +229,11 @@ def create_assessment(request):
             return redirect('quiz:create_assessment')
     
     return render(request, 'quiz/create_assessment.html')
+
+@login_required
+def retake_assessment(request, assessment_id):
+    assessment = get_object_or_404(Assessment, id=assessment_id)
+    # Delete previous UserAssessment and UserResponse for this user and assessment
+    UserResponse.objects.filter(user_assessment__user=request.user, user_assessment__assessment=assessment).delete()
+    UserAssessment.objects.filter(user=request.user, assessment=assessment).delete()
+    return redirect('quiz:start_assessment', assessment_id=assessment_id)

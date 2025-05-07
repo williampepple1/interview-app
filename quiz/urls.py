@@ -10,4 +10,5 @@ urlpatterns = [
     path('assessment/<int:assessment_id>/submit/', views.submit_answer, name='submit_answer'),
     path('assessment/<int:assessment_id>/results/', views.assessment_results, name='assessment_results'),
     path('create/', views.create_assessment, name='create_assessment'),
+    path('assessment/<int:assessment_id>/retake/', views.retake_assessment, name='retake_assessment'),
 ] 

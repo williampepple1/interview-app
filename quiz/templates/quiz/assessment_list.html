@@ -28,6 +28,10 @@
                                    class="py-2 px-4 bg-green-500 hover:bg-green-600 text-white rounded transition duration-300">
                                     View Results
                                 </a>
+                                <a href="{% url 'quiz:retake_assessment' assessment.id %}"
+                                   class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded transition duration-300 ml-2">
+                                    Retake Test
+                                </a>
                             {% else %}
                                 <a href="{% url 'quiz:take_question' assessment.id %}" 
                                    class="py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded transition duration-300">
