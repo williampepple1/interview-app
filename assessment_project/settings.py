@@ -26,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w2@)k(*avylr(-u%2#wa-e6_@9--yw8-s!mk$y&=0^07k#+w(n'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-w2@)k(*avylr(-u%2#wa-e6_@9--yw8-s!mk$y&=0^07k#+w(n')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*', '.vercel.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'assessment_project.wsgi.app'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # Database configuration using URL
-DATABASE_URL = os.environ.get('POSTGRES_URL_NON_POOLING', 'postgres://postgres.tcluugghnwavnbvgchcu:xzrlr2Z45ZzFlWTA@aws-0-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require')
+DATABASE_URL = os.environ.get('DATABASE_URL', f"postgres://{os.environ.get('POSTGRES_USER', 'postgres')}:{os.environ.get('POSTGRES_PASSWORD', 'postgres')}@{os.environ.get('POSTGRES_HOST', 'localhost')}:{os.environ.get('POSTGRES_PORT', '5432')}/{os.environ.get('POSTGRES_DATABASE', 'assessment_db')}")
 
 DATABASES = {
     'default': dj_database_url.config(
