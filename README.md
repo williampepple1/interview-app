@@ -1,48 +1,107 @@
-# Assessment App
+# Assessment Project
 
-A Django-based assessment application where users can take timed multiple-choice assessments.
+A Django-based assessment application with PostgreSQL database.
 
-## Features
-- Admin can create assessments with multiple-choice questions
-- Users can attempt assessments with a 30-second time limit per question
-- Session-based assessment tracking
-- PostgreSQL database for data storage
+## Prerequisites
 
-## Setup Instructions
+- Docker
+- Docker Compose
 
-1. Create a virtual environment:
+## Getting Started
+
+1. Clone the repository:
 ```bash
-python -m venv venv
+git clone <repository-url>
+cd assessment-project
 ```
 
-2. Activate the virtual environment:
-- Windows:
+2. Build and start the containers:
 ```bash
-venv\Scripts\activate
-```
-- Unix/MacOS:
-```bash
-source venv/bin/activate
+docker-compose up --build
 ```
 
-3. Install dependencies:
+The application will be available at http://localhost:8000
+
+## Development
+
+### Running in Detached Mode
+To run the application in the background:
 ```bash
-pip install -r requirements.txt
+docker-compose up -d
 ```
 
-4. Run migrations:
+### Viewing Logs
+To view the application logs:
 ```bash
-python manage.py migrate
+docker-compose logs -f
 ```
 
-5. Create a superuser:
+### Stopping the Application
+To stop the containers:
 ```bash
-python manage.py createsuperuser
+docker-compose down
 ```
 
-6. Run the development server:
+## Database Management
+
+### Creating a Superuser
+To create an admin user:
 ```bash
-python manage.py runserver
+docker-compose exec web python manage.py createsuperuser
 ```
 
-The application will be available at http://127.0.0.1:8000/ 
+### Running Management Commands
+To run any Django management command:
+```bash
+docker-compose exec web python manage.py <command>
+```
+
+### Accessing the Database
+To access the PostgreSQL database directly:
+```bash
+docker-compose exec db psql -U postgres -d assessment_db
+```
+
+## Project Structure
+
+```
+assessment_project/
+├── assessment/          # Main application directory
+├── static/             # Static files
+├── templates/          # HTML templates
+├── Dockerfile         # Docker configuration
+├── docker-compose.yml # Docker Compose configuration
+└── requirements.txt   # Python dependencies
+```
+
+## Environment Variables
+
+The following environment variables are configured in docker-compose.yml:
+
+- `DEBUG`: Set to True for development
+- `SECRET_KEY`: Django secret key
+- `POSTGRES_DATABASE`: Database name
+- `POSTGRES_USER`: Database user
+- `POSTGRES_PASSWORD`: Database password
+- `POSTGRES_HOST`: Database host
+- `POSTGRES_PORT`: Database port
+
+## Dependencies
+
+Main dependencies include:
+- Django 4.2.0
+- PostgreSQL 13
+- Gunicorn
+- WhiteNoise
+- psycopg2-binary
+- python-dotenv
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
+
+
