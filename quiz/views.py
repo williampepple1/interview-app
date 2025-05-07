@@ -154,10 +154,27 @@ def assessment_results(request, assessment_id):
     responses = UserResponse.objects.filter(user_assessment=user_assessment)
     total_questions = assessment.questions.count()
     
+    # Prepare enriched response data with all options
+    enriched_responses = []
+    for response in responses:
+        question = response.question
+        options = [
+            (1, question.option1),
+            (2, question.option2),
+            (3, question.option3),
+            (4, question.option4),
+        ]
+        enriched_responses.append({
+            'response': response,
+            'options': options,
+            'selected_option': response.selected_option,
+            'correct_option': question.correct_option,
+        })
+
     context = {
         'assessment': assessment,
         'user_assessment': user_assessment,
-        'responses': responses,
+        'responses': enriched_responses,
         'total_questions': total_questions,
         'score_percentage': (user_assessment.score / total_questions) * 100,
     }
