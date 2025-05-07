@@ -2,21 +2,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "assessment_project/wsgi.py",
-        "use": "@vercel/python",
-        "config": {
-          "maxLambdaSize": "50mb"
-        }
+        "src": "assessment/wsgi.py",
+        "use": "@vercel/python"
       }
     ],
     "routes": [
       {
-        "src": "/static/(.*)",
-        "dest": "/static/$1"
-      },
-      {
         "src": "/(.*)",
-        "dest": "assessment_project/wsgi.py"
+        "dest": "assessment/wsgi.py"
       }
     ]
   }
