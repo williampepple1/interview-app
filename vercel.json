@@ -8,19 +8,12 @@
                 "maxLambdaSize": "50mb",
                 "runtime": "python3.9"
             }
-        },
-        {
-            "src": "build_files.sh",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "staticfiles"
-            }
         }
     ],
     "routes": [
         {
             "src": "/static/(.*)",
-            "dest": "/static/$1"
+            "dest": "/staticfiles/$1"
         },
         {
             "src": "/(.*)",
@@ -28,7 +21,8 @@
         }
     ],
     "env": {
-        "PYTHONPATH": "."
+        "PYTHONPATH": ".",
+        "DJANGO_SETTINGS_MODULE": "assessment_project.settings"
     }
 }
   
