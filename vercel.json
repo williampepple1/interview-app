@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
         {
-            "src": "assessment_project/wsgi.py",
+            "src": "index.py",
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "50mb",
@@ -24,8 +24,11 @@
         },
         {
             "src": "/(.*)",
-            "dest": "assessment_project/wsgi.py"
+            "dest": "index.py"
         }
-    ]
+    ],
+    "env": {
+        "PYTHONPATH": "."
+    }
 }
   
