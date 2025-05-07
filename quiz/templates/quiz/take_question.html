@@ -16,6 +16,7 @@
         </div>
         <p class="text-lg text-gray-800 mb-6">{{ question.question_text }}</p>
         
+        <div id="error-message" class="hidden mb-4 p-3 rounded bg-red-100 text-red-700"></div>
         <form id="question-form" class="space-y-4">
             {% csrf_token %}
             <div class="space-y-3">
@@ -41,6 +42,7 @@
         const timerElement = document.getElementById('timer');
         const timerTextElement = document.getElementById('timer-text');
         const form = document.getElementById('question-form');
+        const errorMessage = document.getElementById('error-message');
         
         const timer = setInterval(() => {
             timeLeft--;
@@ -60,6 +62,8 @@
         });
 
         async function submitAnswer() {
+            errorMessage.classList.add('hidden');
+            errorMessage.textContent = '';
             const formData = new FormData(form);
             const selectedOption = formData.get('answer') || '0';  // Default to 0 if no answer selected
             
@@ -78,10 +82,13 @@
                 if (response.ok) {
                     window.location.reload();
                 } else {
-                    console.error('Error submitting answer');
+                    const data = await response.json();
+                    errorMessage.textContent = data.error || 'Error submitting answer';
+                    errorMessage.classList.remove('hidden');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                errorMessage.textContent = 'Network error. Please try again.';
+                errorMessage.classList.remove('hidden');
             }
         }
     });
